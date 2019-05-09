@@ -1,14 +1,13 @@
-package main
+package filew
 
 import (
-  "fmt"
   "os"
   "time"
 )
 
-// watch watches a file and returns a channels with change events
+// Watch watches a file and returns a channels with change events
 // and an err if the file does not exist
-func watch(fpath string) (events chan string, err error) {
+func Watch(fpath string) (events chan string, err error) {
   ogfi, err := os.Stat(fpath)
   if err != nil {
     return
@@ -31,16 +30,4 @@ func watch(fpath string) (events chan string, err error) {
     }
   }()
   return
-}
-
-func main() {
-  fpath := "testdata/file1"
-  events, err := watch(fpath)
-  if err != nil {
-    panic(err)
-  }
-  fmt.Printf("watching %s\n", fpath)
-  for e := range events {
-    fmt.Println(e)
-  }
 }
