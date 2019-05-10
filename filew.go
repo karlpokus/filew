@@ -1,45 +1,43 @@
 package filew
 
 import (
-  "os"
   "time"
+  "fmt"
 )
 
-type finfo interface {
-  Stat(string) (os.FileInfo, error)
+type event struct {
+  path, op string
+  err error
 }
 
-type ogStat struct {}
-
-func (o ogStat) Stat(fp string) (os.FileInfo, error) {
-  return os.Stat(fp)
-}
-
-// Watch watches a file and returns a channels with file change events
-// and an err if the file does not exist
-func Watch(fp string, f finfo) (events chan string, err error) {
-  if f == nil {
-    f = ogStat{}
+func (ev event) String() string {
+  if ev.err != nil {
+    return ev.err.Error()
   }
-  ogfi, err := f.Stat(fp)
+  return fmt.Sprintf("%s %s", ev.path, ev.op)
+}
+
+// Watch watches files and returns a channels with file change events
+func Watch(root string) (events chan event, err error) {
+  base := make(tree)
+  err = base.walk(root)
   if err != nil {
     return
   }
-  events = make(chan string)
+  events = make(chan event)
   go func(){
     ticker := time.NewTicker(1 * time.Second)
     defer ticker.Stop()
     defer close(events)
-    for _ = range ticker.C {
-      fi, err := f.Stat(fp)
+    for _ = range ticker.C { // poll
+      fs := make(tree)
+      err := fs.walk(root)
       if err != nil {
-        events <- "file removed"
+        events <- event{err: err}
         return
       }
-      if fi.Size() != ogfi.Size() {
-        ogfi = fi
-        events <- "file changed"
-      }
+      base.diff(fs, events) // TODO: concurrent op
+      base = fs
     }
   }()
   return

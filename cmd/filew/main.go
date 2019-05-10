@@ -6,13 +6,13 @@ import (
 )
 
 func main() {
-  fp := "testdata/file1"
-  events, err := filew.Watch(fp, nil)
+  fpath := "testdata"
+  events, err := filew.Watch(fpath)
   if err != nil {
     panic(err)
   }
   fmt.Printf("watching %s\n", fpath)
-  for e := range events {
-    fmt.Println(e)
+  for ev := range events {
+    fmt.Println(ev)
   }
 }
