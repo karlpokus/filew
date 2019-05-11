@@ -1,20 +1,44 @@
 package filew
 
 import (
-  "testing"
-  "github.com/karlpokus/filew/pkg/fstat"
+	"sort"
+	"testing"
+
+	"github.com/karlpokus/filew/internal/mockw"
 )
 
 func TestWatch(t *testing.T) {
-  mock := &fstat.Mock{}
-  events, err := Watch("whatever", mock)
-  if err != nil {
-    t.Errorf("expected nil, got %s", err)
+	mock := &mockw.Mock{}
+	events, err := Watch("whatever", mock)
+	if err != nil {
+		t.Errorf("expected nil, got %s", err)
+	}
+	var got []event
+	for ev := range events { // will close after sending the err
+		got = append(got, ev)
+	}
+	sort.Slice(got, func(i, j int) bool {
+		return got[i].path < got[j].path
+	})
+	want := []event{
+    {"", "", mockw.PathErr},
+		{"a", "updated", nil},
+		{"b", "removed", nil},
+		{"c", "created", nil},
+	}
+	if !match(got, want) {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+}
+
+func match(got, want []event) bool {
+  if len(got) != len(want) {
+    return false
   }
-  mock.EditSize()
-  expected := "file changed"
-  event := <-events
-  if event != expected {
-    t.Errorf("expected %s, got %s", expected, event)
+  for i := range want {
+    if got[i] != want[i] {
+      return false
+    }
   }
+  return true
 }

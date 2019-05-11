@@ -6,11 +6,12 @@ See `cmd/filew/main.go`
 
 # test
 ```bash
-$ go test # broken atm
+$ go test
 ```
 
 # todo
-- [ ] tests and mocking
+- [x] tests and mocking
+- [ ] concurrent diff
 - [ ] definition of change
 - [ ] measure mem
 - [x] recursive watch
