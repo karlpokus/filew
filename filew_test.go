@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/karlpokus/filew/internal/mockw"
+  "github.com/karlpokus/filew/internal/tree"
 )
 
 func TestWatch(t *testing.T) {
@@ -41,4 +42,15 @@ func match(got, want []event) bool {
     }
   }
   return true
+}
+
+func BenchmarkWalk(b *testing.B) {
+  w := fswalk{}
+  base := make(tree.Tree)
+  b.ReportAllocs()
+  b.ResetTimer()
+  for i := 0; i < b.N; i++ {
+    w.Walk("testdata/express", base) // ~300 files
+  }
+
 }

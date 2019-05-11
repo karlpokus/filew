@@ -6,7 +6,7 @@ See `cmd/filew/main.go`
 
 # test
 ```bash
-$ go test
+$ go test -bench=.
 ```
 
 # todo

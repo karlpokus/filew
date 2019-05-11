@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-  fpath := "testdata"
+  fpath := "testdata/small"
   events, err := filew.Watch(fpath, nil)
   if err != nil {
     panic(err)
