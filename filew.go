@@ -6,7 +6,9 @@ import (
 	"github.com/karlpokus/filew/internal/tree"
 )
 
-// Watch watches files and returns a channels with file change events
+// Watch watches files and returns a channel with file change events.
+// note: the channel might also send an error if Walker.Walk fails. This also
+// closes the channel.
 func Watch(root string, w Walker) (events chan event, err error) {
 	if w == nil {
 		w = fswalk{}
@@ -20,7 +22,7 @@ func Watch(root string, w Walker) (events chan event, err error) {
 	go func() {
 		ticker := time.NewTicker(1 * time.Second)
 		defer ticker.Stop()
-		defer close(events)      // TODO: alert future senders about this
+		defer close(events)
 		for _ = range ticker.C { // poll
 			fs := make(tree.Tree)
 			err := w.Walk(root, fs)
