@@ -9,19 +9,24 @@ import (
   "github.com/karlpokus/filew"
 )
 
-var mem = flag.Bool("mem", false, "toggle mem usage output")
+var (
+  mem = flag.Bool("mem", false, "toggle mem usage output")
+  fpath = flag.String("p", "", "path to dir to watch") // required
+)
 
 func main() {
   flag.Parse()
+  if *fpath == "" {
+    panic("path to dir missing")
+  }
   if *mem {
     go memUsage()
   }
-  fpath := "testdata/express"
-  events, err := filew.Watch(fpath, nil)
+  events, err := filew.Watch(*fpath, nil)
   if err != nil {
     panic(err)
   }
-  fmt.Printf("watching %s\n", fpath)
+  fmt.Printf("watching %s\n", *fpath)
   for ev := range events {
     fmt.Println(ev)
   }

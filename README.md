@@ -6,9 +6,6 @@ A crude file watcher in go based on polling file size change (a rather inexpensi
 - delivers file change events on a channel
 - new files added will be watched
 
-# usage
-See `cmd/filew/main.go`
-
 # test
 ```bash
 $ go test -bench=.
@@ -19,7 +16,8 @@ $ go test -bench=.
 - [x] concurrent diff
 - [x] definition of change
 - [ ] consider more data points for a file change event
-- [ ] fpath flag
+- [x] fpath flag
+- [ ] install and usage docs
 - [x] measure mem
 - [x] recursive watch
 - [ ] try [epoll](https://golang.org/pkg/syscall/#EpollCreate)
