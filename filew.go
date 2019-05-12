@@ -30,7 +30,8 @@ func Watch(root string, w Walker) (events chan event, err error) {
 				events <- event{err: err}
 				return
 			}
-			diff(base, fs, events) // TODO: concurrent op
+			//go diff(tree.Copy(base), tree.Copy(fs), events)
+			diff(base, fs, events)
 			base = fs
 		}
 	}()

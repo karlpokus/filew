@@ -16,8 +16,10 @@ $ go test -bench=.
 
 # todo
 - [x] tests and mocking
-- [ ] concurrent diff
+- [x] concurrent diff
 - [x] definition of change
+- [ ] consider more data points for a file change event
+- [ ] fpath flag
 - [x] measure mem
 - [x] recursive watch
 - [ ] try [epoll](https://golang.org/pkg/syscall/#EpollCreate)

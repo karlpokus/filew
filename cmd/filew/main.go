@@ -5,7 +5,6 @@ import (
   "flag"
   "runtime"
   "time"
-  "os"
 
   "github.com/karlpokus/filew"
 )
