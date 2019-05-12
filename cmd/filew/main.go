@@ -11,14 +11,11 @@ import (
 
 var (
   mem = flag.Bool("mem", false, "toggle mem usage output")
-  fpath = flag.String("p", "", "path to dir to watch") // required
+  fpath = flag.String("p", ".", "path to dir to watch")
 )
 
 func main() {
   flag.Parse()
-  if *fpath == "" {
-    panic("path to dir missing")
-  }
   if *mem {
     go memUsage()
   }
