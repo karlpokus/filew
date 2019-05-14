@@ -3,8 +3,33 @@ A crude file watcher in go based on polling file size change (a rather inexpensi
 
 # features
 - recursive watcher
-- delivers file change events on a channel
+- delivers file change events (updated, removed, created) on a channel
 - new files added will be watched
+- can be used as a lib or a cli
+
+# install
+Grab the cli from the [releases tab](https://github.com/karlpokus/filew/releases). Install the lib with the usual `$ go get github.com/karlpokus/filew`
+
+# usage
+cli
+```bash
+# filew writes to stdout so just use a pipe
+$ filew | your-script.sh
+```
+
+lib
+```go
+import "github.com/karlpokus/filew"
+
+fpath := "path/to/dir"
+events, err := filew.Watch(fpath, nil)
+if err != nil {
+  // handle err
+}
+for ev := range events {
+  // handle ev
+}
+```
 
 # test
 ```bash
@@ -17,7 +42,10 @@ $ go test -bench=.
 - [x] definition of change
 - [ ] consider more data points for a file change event
 - [x] fpath flag
-- [ ] install and usage docs
+- [x] install and usage docs
+- [ ] godoc
+- [x] pre-release binary
+- [x] version flag
 - [x] measure mem
 - [x] recursive watch
 - [ ] try [epoll](https://golang.org/pkg/syscall/#EpollCreate)
