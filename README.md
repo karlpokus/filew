@@ -1,3 +1,5 @@
+![The mascot](filew_gopher.png)
+
 # filew
 A crude file watcher in go based on polling file size change (a rather inexpensive operation). The only time we're opening a file is to read a dir. I'm hoping to collect some cpu-, and memory usage data and see how it relates to number of files watched.
 
